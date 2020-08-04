@@ -23,7 +23,7 @@ DEFAULT_DISCOVERY_TIMEOUT = 5
 
 
 class Discover:
-    def __init__(self, discovery_timeout, debug=False, response_listening_port=0):
+    def __init__(self, discovery_timeout, debug=False, sending_port=0, response_listening_port=0):
         self._debug = debug
         self._discovery_timeout = discovery_timeout
         self._discovery_sockets = []
@@ -45,6 +45,9 @@ class Discover:
                 sending_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
                 sending_socket.setblocking(False)
                 sending_socket.settimeout(self._discovery_timeout)
+
+                if sending_port != 0:
+                    sending_socket.bind((my_ip, sending_port))
 
                 listening_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
                 listening_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
