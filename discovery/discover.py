@@ -23,7 +23,7 @@ DEFAULT_DISCOVERY_TIMEOUT = 5
 
 
 class Discover:
-    def __init__(self, discovery_timeout, debug=False):
+    def __init__(self, discovery_timeout, debug=False, response_listening_port=0):
         self._debug = debug
         self._discovery_timeout = discovery_timeout
         self._discovery_sockets = []
@@ -52,7 +52,7 @@ class Discover:
                 listening_socket.setblocking(False)
                 listening_socket.settimeout(self._discovery_timeout)
 
-                listening_socket.bind((my_ip, 0))
+                listening_socket.bind((my_ip, response_listening_port))
 
                 self._discovery_sockets.append((my_ip, broadcast_ip, sending_socket, listening_socket))
 
@@ -78,9 +78,9 @@ class Discover:
             if self._debug:
                 print("  send discovery packet to " + str(broadcast_ip) + ":0xd15c, packet=" + str(updated_packet))
 
-    def _process_response(self, response_to_processs, callback=None):
-        parsed_response = {kv[0]: kv[1] for kv in [kv for kv in [kv.split('=') for kv in response_to_processs.split(';')] if len(kv) > 1]}
-        parsed_response.update({kv[0]: None for kv in [kv for kv in [kv.split('=') for kv in response_to_processs.split(';')] if len(kv) == 1]})
+    def _process_response(self, response_to_process, callback=None):
+        parsed_response = {kv[0]: kv[1] for kv in [kv for kv in [kv.split('=') for kv in response_to_process.split(';')] if len(kv) > 1]}
+        parsed_response.update({kv[0]: None for kv in [kv for kv in [kv.split('=') for kv in response_to_process.split(';')] if len(kv) == 1]})
         # parsed_response.update({"ERROR_" + str(i + 1): kv[0] for i, kv in enumerate([kv for kv in [kv.split('=') for kv in response_to_processs.split(';')] if len(kv) == 1])})
 
         self._responses.append(parsed_response)
