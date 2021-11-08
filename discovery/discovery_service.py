@@ -22,9 +22,9 @@ from discovery.interfaces import get_interfaces
 
 
 class Discovery:
-    def __init__(self, typ):
+    def __init__(self, typ, debug=False):
         self._type = typ
-        self._debug = False
+        self._debug = debug
         self._receiving_socket = None
         self._thread = None
         self._stop = False
@@ -154,3 +154,14 @@ class Discovery:
 
     def stop(self):
         self._stop = True
+
+
+if __name__ == "__main__":
+    discovery_service = Discovery("JUSTEST", debug=True)
+    discovery_service.register_service("TEST", "HERE")
+    discovery_service.start()
+
+    import time
+
+    while True:
+        time.sleep(1)
