@@ -21,7 +21,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="pyros-discovery",
-    version="1.1",
+    version="1.1.1",
     author="Daniel Sendula",
     description="Simple discovery service for PyROS",
     long_description=long_description,
